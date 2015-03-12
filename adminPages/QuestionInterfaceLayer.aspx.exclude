@@ -1,0 +1,270 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/admin.master" AutoEventWireup="true" CodeFile="QuestionInterfaceLayer.aspx.cs" Inherits="testinterface" %>
+
+
+<asp:Content ID="Content3" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
+    <asp:ScriptManager ID="ScriptManager1" runat="server" />
+    <asp:UpdatePanel runat="server" ID="UpdatePanel1" UpdateMode="Conditional">
+        <ContentTemplate>
+            <div>
+
+                <asp:GridView ID="GridViewQuestion" runat="server" AutoGenerateColumns="False" BackColor="LightGoldenrodYellow" BorderColor="Tan" BorderWidth="1px" CellPadding="2" ForeColor="Black" GridLines="None" OnRowCancelingEdit="GridViewQuestion_RowCancelingEdit" OnRowDeleting="GridViewQuestion_RowDeleting" OnRowEditing="GridViewQuestion_RowEditing" OnRowUpdating="GridViewQuestion_RowUpdating1">
+                    <AlternatingRowStyle BackColor="PaleGoldenrod" />
+                    <Columns>
+                        <asp:CommandField ShowEditButton="True" />
+                        <asp:CommandField ShowSelectButton="True" />
+                        <asp:CommandField ShowDeleteButton="True" />
+                        <asp:TemplateField HeaderText="ID">
+                            <EditItemTemplate>
+                                <asp:Label ID="LBID_edit" runat="server" Text='<%# Bind("ID") %>'></asp:Label>
+                            </EditItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label ID="LBID" runat="server" Text='<%# Bind("ID") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Description">
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtDesc_edit" runat="server" Text='<%# Bind("Describtion") %>' CssClass="small_inpt"></asp:TextBox>
+                            </EditItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label ID="LBDesc" runat="server" Text='<%# Bind("Describtion") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Type">
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtType_edit" runat="server" Text='<%# (Eval("Type").ToString())=="1"?"True/False":"Multi Choice" %>' Enabled="False" ReadOnly="True" Width="75px" CssClass="small_inpt"></asp:TextBox>
+                            </EditItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label ID="LBType" runat="server" Text='<%# (Eval("Type").ToString())=="1"?"True/False":"Multi Choice" %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="A">
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtA_edit" runat="server" Text='<%# Bind("A") %>' Enabled='<%# (Eval("Type").ToString())=="2"?true:false %>' ReadOnly='<%# (Eval("Type").ToString())=="2"?true:false %>' CssClass="small_inpt"></asp:TextBox>
+                            </EditItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label ID="LBA" runat="server" Text='<%# Bind("A") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="B">
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtB_edit" runat="server" Text='<%# Bind("B") %>' Enabled='<%# (Eval("Type").ToString())=="2"?true:false %>' CssClass="small_inpt"></asp:TextBox>
+                            </EditItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label ID="LBB" runat="server" Text='<%# Bind("B") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="C">
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtC_edit" runat="server" Text='<%# Bind("C") %>' Visible='<%# (Eval("Type").ToString())=="2"?true:false %>' CssClass="small_inpt"></asp:TextBox>
+                            </EditItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label ID="LBC" runat="server" Text='<%# Bind("C") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="D">
+                            <EditItemTemplate>
+                                <asp:TextBox ID="txtD_edit" runat="server" Text='<%# Bind("D") %>' Visible='<%# (Eval("Type").ToString())=="2"?true:false %>' CssClass="small_inpt"></asp:TextBox>
+                            </EditItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label ID="LBD" runat="server" Text='<%# Bind("D") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="ModelAnswer">
+                            <EditItemTemplate>
+                                <!--   <asp:TextBox ID="txtAns_edit" runat="server" Text='<%# Bind("Answer") %>'></asp:TextBox>-->
+                                <asp:DropDownList ID="DDL_choice" runat="server" Visible='<%# (Eval("Type").ToString())=="2"?true:false %>' SelectedValue='<%# (Eval("Type").ToString())=="2"?Eval("Answer"):"z" %>' CssClass="small_inpt" AppendDataBoundItems="True">
+                                    <asp:ListItem>A</asp:ListItem>
+                                    <asp:ListItem>B</asp:ListItem>
+                                    <asp:ListItem>C</asp:ListItem>
+                                    <asp:ListItem>D</asp:ListItem>
+                                    <asp:ListItem Enabled="False">z</asp:ListItem>
+                                    <asp:ListItem>null</asp:ListItem>
+                                </asp:DropDownList>
+                                <asp:DropDownList ID="DDL_TF" runat="server" Visible='<%# (Eval("Type").ToString())=="1"?true:false %>' SelectedValue='<%# (Eval("Type").ToString())=="1"?Eval("Answer"):"z" %>' CssClass="small_inpt" AppendDataBoundItems="True">
+                                    <asp:ListItem Value="A">True</asp:ListItem>
+                                    <asp:ListItem Value="B">False</asp:ListItem>
+                                    <asp:ListItem Enabled="False">z</asp:ListItem>
+                                    <asp:ListItem>null</asp:ListItem>
+                                </asp:DropDownList>
+                            </EditItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label ID="LBAns" runat="server" Text='<%# Bind("Answer") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Course">
+                            <EditItemTemplate>
+                                <asp:DropDownList ID="DDLCrs" runat="server" DataSourceID="SqlDataSource1" DataTextField="Crs_Name" DataValueField="Crs_Id" CssClass="small_inpt">
+                                </asp:DropDownList>
+                                <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:Exam_Sys %>" SelectCommand="SELECT [Crs_Id], [Crs_Name] FROM [Course]"></asp:SqlDataSource>
+                            </EditItemTemplate>
+                            <ItemTemplate>
+                                <asp:Label ID="LBCrs" runat="server" Text='<%# Bind("CNo") %>'></asp:Label>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                    </Columns>
+                    <EmptyDataTemplate>
+                        Sorry No Data Found In QuestionTable
+                    </EmptyDataTemplate>
+                    <FooterStyle BackColor="Tan" />
+                    <HeaderStyle BackColor="Tan" Font-Bold="True" />
+                    <PagerStyle BackColor="PaleGoldenrod" ForeColor="DarkSlateBlue" HorizontalAlign="Center" />
+                    <SelectedRowStyle BackColor="DarkSlateBlue" ForeColor="GhostWhite" />
+                    <SortedAscendingCellStyle BackColor="#FAFAE7" />
+                    <SortedAscendingHeaderStyle BackColor="#DAC09E" />
+                    <SortedDescendingCellStyle BackColor="#E1DB9C" />
+                    <SortedDescendingHeaderStyle BackColor="#C2A47B" />
+                </asp:GridView>
+
+            </div>
+            <asp:MultiView ID="MultiView1" runat="server">
+                <asp:View ID="addview" runat="server">
+                    <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Insert New Question" Width="205px" CssClass="one1" />
+                </asp:View>
+                <asp:View ID="insview" runat="server">
+
+                    <div id="top">
+
+                        <table style="width: 100%;">
+                            <tr>
+                                <td class="auto-style12">
+                                    <asp:Label ID="Label1" runat="server" Text="Description"></asp:Label>
+                                </td>
+                                <td class="auto-style3">
+                                    <asp:TextBox ID="txt_desc" runat="server" CssClass="small_textBox"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txt_desc" ErrorMessage="RequiredFieldValidator" ForeColor="Red" ValidationGroup="v">*</asp:RequiredFieldValidator>
+                                    <br />
+                                </td>
+                                <td class="auto-style3"></td>
+                            </tr>
+                            <tr>
+                                <td class="auto-style11">
+                                    <asp:Label ID="Label2" runat="server" Text="Type"></asp:Label>
+                                </td>
+                                <td>
+                                    <!-- <select id="SelectType" name="D1">
+                                    <option value="0">Select Type</option>
+                                    <option value="1">True/False</option>
+                                    <option value="2">MultiChoice</option>
+
+                                </select>
+                                   -->
+                                    <asp:DropDownList ID="SelectType" runat="server" OnSelectedIndexChanged="SelectType_SelectedIndexChanged" AutoPostBack="True">
+                                        <asp:ListItem Value="0" Selected="True">Select Type</asp:ListItem>
+                                        <asp:ListItem Value="1">True/False</asp:ListItem>
+                                        <asp:ListItem Value="2">MultiChoice</asp:ListItem>
+                                    </asp:DropDownList>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    <div id="trueFalse" runat="server" visible="false">
+                        <table>
+                            <tr>
+                                <td style="width: 99px">Model Ans </td>
+                                <td CssClass="rdaio-btn">
+                                    <asp:RadioButtonList ID="trueFalseRadio" runat="server" RepeatDirection="Horizontal" Style="direction: ltr" Width="414px">
+                                        <asp:ListItem>True</asp:ListItem>
+                                        <asp:ListItem>False</asp:ListItem>
+                                    </asp:RadioButtonList>
+                                </td>
+                                <td style="width: 446px">
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator6" runat="server" ControlToValidate="trueFalseRadio" ErrorMessage="RequiredFieldValidator" ForeColor="Red" ValidationGroup="r">*</asp:RequiredFieldValidator>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="multichoice" runat="server" visible="false">
+
+                        <table style="width: 100%;">
+                            <tr>
+                                <td class="auto-style19">
+                                    <asp:Label ID="Label9" runat="server" Text="choice A"></asp:Label>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="txt_chA" runat="server" CssClass="small_textBox"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txt_chA" ErrorMessage="RequiredFieldValidator" ForeColor="Red" ValidationGroup="v">*</asp:RequiredFieldValidator>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="auto-style20">
+                                    <asp:Label ID="Label4" runat="server" Text="choice B"></asp:Label>
+                                </td>
+                                <td class="auto-style3">
+                                    <asp:TextBox ID="txt_chB" runat="server" CssClass="small_textBox"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txt_chB" ErrorMessage="RequiredFieldValidator" ForeColor="Red" ValidationGroup="v">*</asp:RequiredFieldValidator>
+                                </td>
+                                <td class="auto-style3"></td>
+                            </tr>
+                            <tr>
+                                <td class="auto-style20">
+                                    <asp:Label ID="Label6" runat="server" Text="choice C"></asp:Label>
+                                </td>
+                                <td class="auto-style3">
+                                    <asp:TextBox ID="txt_chC" runat="server" CssClass="small_textBox"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txt_chC" ErrorMessage="RequiredFieldValidator" ForeColor="Red" ValidationGroup="v">*</asp:RequiredFieldValidator>
+                                </td>
+                                <td class="auto-style3">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="auto-style19">
+                                    <asp:Label ID="Label5" runat="server" Text="choice C"></asp:Label>
+                                </td>
+                                <td>
+                                    <asp:TextBox ID="txt_chD" runat="server" CssClass="small_textBox"></asp:TextBox>
+                                    <asp:RequiredFieldValidator ID="RequiredFieldValidator5" runat="server" ControlToValidate="txt_chD" ErrorMessage="RequiredFieldValidator" ForeColor="Red" ValidationGroup="v">*</asp:RequiredFieldValidator>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="auto-style19">
+                                    <asp:Label ID="Label7" runat="server" Text="Model Ans"></asp:Label>
+                                </td>
+                                <td>
+                                    <asp:DropDownList ID="DDL_Ans" runat="server">
+                                        <asp:ListItem>A</asp:ListItem>
+                                        <asp:ListItem>B</asp:ListItem>
+                                        <asp:ListItem>C</asp:ListItem>
+                                        <asp:ListItem>D</asp:ListItem>
+                                    </asp:DropDownList>
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    <div id="divButton">
+
+                        <table style="width: 100%;">
+                            <tr>
+                                <td class="auto-style22" style="width: 89px">
+                                    <asp:Label ID="Label8" runat="server" Text="Course"></asp:Label>
+                                </td>
+                                <td class="auto-style3">
+                                    <asp:DropDownList ID="DDL_Crs" runat="server" DataSourceID="DDL_Crs_datasource" DataTextField="Crs_Name" DataValueField="Crs_Id">
+                                    </asp:DropDownList>
+                                    <asp:SqlDataSource ID="DDL_Crs_datasource" runat="server" ConnectionString="<%$ ConnectionStrings:Exam_Sys %>" SelectCommand="SELECT [Crs_Id], [Crs_Name] FROM [Course]"></asp:SqlDataSource>
+                                </td>
+                                <td class="auto-style3"></td>
+                            </tr>
+                            <tr>
+                                <td class="auto-style16" colspan="2">
+                                    <asp:Button ID="btn_save" runat="server" OnClick="btn_save_Click" Text="Save" Width="109px" ValidationGroup="v" Visible="false" CssClass="four1" />
+                                    <asp:Button ID="btn_save1" runat="server" Text="Save" Width="109px" OnClick="btn_save1_Click" ValidationGroup="r" Visible="false" CssClass="four1" />
+                                    <asp:Button ID="btn_cancel" runat="server" Text="Cancel" Width="116px" OnClick="btn_cancel_Click" CssClass="two1" Visible="false" />
+                                </td>
+                                <td>&nbsp;</td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </asp:View>
+
+            </asp:MultiView>
+
+           
+        </ContentTemplate>
+    </asp:UpdatePanel>
+</asp:Content>

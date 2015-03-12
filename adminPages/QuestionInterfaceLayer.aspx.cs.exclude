@@ -1,0 +1,193 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Web.Services;
+
+public partial class testinterface : System.Web.UI.Page
+{
+    ObjectDataSource obj;
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        string path = HttpContext.Current.Request.Url.AbsolutePath;
+        if (Auth_BLL.userlogged() == false)
+            Response.Redirect("~/login.aspx?url=" + path);
+        if (Auth_BLL.checkRole(Auth_BLL.currentUserId(), 1) == false)
+            Auth_BLL.RouteUser();
+
+        if (!IsPostBack)
+        {
+            obj = new ObjectDataSource();
+            obj.TypeName = "QuestionBusinnessLayer";
+            obj.SelectMethod = "selectAllQuestion";
+            obj.Select();
+            GridViewQuestion.DataSource = obj;
+            GridViewQuestion.DataBind();
+            Session.Add("obj4", obj);
+        }
+        MultiView1.SetActiveView(addview);
+    }
+
+
+
+    protected void GridViewQuestion_RowEditing(object sender, GridViewEditEventArgs e)
+    {
+        obj = (ObjectDataSource)Session["obj4"];
+        GridViewQuestion.EditIndex = e.NewEditIndex;
+        GridViewQuestion.DataSource = obj;
+        GridViewQuestion.DataBind();
+    }
+    protected void GridViewQuestion_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+    {
+        obj = (ObjectDataSource)Session["obj4"];
+        GridViewQuestion.EditIndex = -1;
+        GridViewQuestion.DataSource = obj;
+        GridViewQuestion.DataBind();
+    }
+    protected void GridViewQuestion_RowDeleting(object sender, GridViewDeleteEventArgs e)
+    {
+        obj = (ObjectDataSource)Session["obj4"];
+        obj.DeleteMethod = "deleteQuestion";
+        obj.DeleteParameters.Clear();
+        Label id = (Label)GridViewQuestion.Rows[e.RowIndex].FindControl("LBID");
+        obj.DeleteParameters.Add("ID", id.Text);
+        obj.Delete();
+        GridViewQuestion.DataSource = obj;
+        GridViewQuestion.DataBind();
+        Session["obj4"] = obj;
+
+
+    }
+
+    protected void GridViewQuestion_RowUpdating1(object sender, GridViewUpdateEventArgs e)
+    {
+        obj = (ObjectDataSource)Session["obj4"];
+        obj.UpdateMethod = "updateQuestion";
+        obj.UpdateParameters.Clear();
+        Label id = (Label)GridViewQuestion.Rows[e.RowIndex].FindControl("LBID_edit");
+        TextBox desc = (TextBox)GridViewQuestion.Rows[e.RowIndex].FindControl("txtDesc_edit");
+        TextBox type = (TextBox)GridViewQuestion.Rows[e.RowIndex].FindControl("txtType_edit");
+        TextBox cha = (TextBox)GridViewQuestion.Rows[e.RowIndex].FindControl("txtA_edit");
+        TextBox chb = (TextBox)GridViewQuestion.Rows[e.RowIndex].FindControl("txtB_edit");
+        TextBox chc = (TextBox)GridViewQuestion.Rows[e.RowIndex].FindControl("txtC_edit");
+        TextBox chd = (TextBox)GridViewQuestion.Rows[e.RowIndex].FindControl("txtD_edit");
+        //  TextBox ans = (TextBox)GridViewQuestion.Rows[e.RowIndex].FindControl("txtAns_edit");
+        string tf = ((DropDownList)GridViewQuestion.Rows[e.RowIndex].FindControl("DDL_TF")).SelectedValue.ToString();
+        string choice = ((DropDownList)GridViewQuestion.Rows[e.RowIndex].FindControl("DDL_choice")).SelectedValue.ToString();
+
+        string crs = ((DropDownList)GridViewQuestion.Rows[e.RowIndex].FindControl("DDLCrs")).SelectedValue.ToString();
+
+        obj.UpdateParameters.Add("ID", id.Text);
+        obj.UpdateParameters.Add("Describtion", desc.Text);
+        obj.UpdateParameters.Add("CNo", crs);
+        if (type.Text == "True/False")            //"True/False":"Multi Choice"
+        {
+            obj.UpdateParameters.Add("Type", "1");
+            obj.UpdateParameters.Add("Answer", tf);
+
+        }
+        else if (type.Text == "Multi Choice")
+        {
+            obj.UpdateParameters.Add("Type", "2");
+            obj.UpdateParameters.Add("Answer", choice);
+        }
+
+        obj.UpdateParameters.Add("A", cha.Text);
+        obj.UpdateParameters.Add("B", chb.Text);
+        obj.UpdateParameters.Add("C", chc.Text);
+        obj.UpdateParameters.Add("D", chd.Text);
+
+
+        obj.Update();
+        GridViewQuestion.EditIndex = -1;
+        GridViewQuestion.DataSource = obj;
+        GridViewQuestion.DataBind();
+        Session["obj4"] = obj;
+
+    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        MultiView1.SetActiveView(insview);
+    }
+
+    public void save()
+    {
+        obj = (ObjectDataSource)Session["obj4"];
+        obj.InsertMethod = "InsertQuestion";
+        obj.InsertParameters.Clear();
+
+        obj.InsertParameters.Add("Describtion", txt_desc.Text);
+        //question type multi chooice
+        if (SelectType.SelectedValue == "2")
+            obj.InsertParameters.Add("Answer", DDL_Ans.SelectedValue);
+        // question type true/false
+        if (SelectType.SelectedValue == "1")
+            obj.InsertParameters.Add("Answer", trueFalseRadio.SelectedValue);
+
+
+        obj.InsertParameters.Add("Type", SelectType.SelectedValue.ToString());
+        obj.InsertParameters.Add("CNo", DDL_Crs.SelectedValue);
+        //if question type multiChoice
+
+        obj.InsertParameters.Add("A", txt_chA.Text);
+        obj.InsertParameters.Add("B", txt_chB.Text);
+        obj.InsertParameters.Add("C", txt_chC.Text);
+        obj.InsertParameters.Add("D", txt_chD.Text);
+        obj.Insert();
+
+        GridViewQuestion.DataSource = obj;
+        GridViewQuestion.DataBind();
+        Session["obj4"] = obj;
+        txt_desc.Text = "";
+        txt_chA.Text = "";
+        txt_chB.Text = "";
+        txt_chC.Text = "";
+        txt_chD.Text = "";
+        SelectType.SelectedValue = "0";
+    }
+    protected void btn_save_Click(object sender, EventArgs e)
+    {
+        save();
+    }
+
+
+    protected void btn_cancel_Click(object sender, EventArgs e)
+    {
+        txt_desc.Text = "";
+        txt_chA.Text = "";
+        txt_chB.Text = "";
+        txt_chC.Text = "";
+        txt_chD.Text = "";
+        SelectType.SelectedValue = "0";
+        MultiView1.SetActiveView(addview);
+    }
+
+    protected void btn_save1_Click(object sender, EventArgs e)
+    {
+        save();
+    }
+    protected void SelectType_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (SelectType.SelectedValue == "1")//true&false
+        {
+            trueFalse.Visible = true;
+            multichoice.Visible = false;
+            btn_save.Visible = false;
+            btn_save1.Visible = true;
+            btn_cancel.Visible = true;
+            MultiView1.ActiveViewIndex = 1;
+        }
+        else if (SelectType.SelectedValue == "2")
+        {
+            trueFalse.Visible = false;
+            multichoice.Visible = true;
+            btn_save.Visible = true;
+            btn_save1.Visible = false;
+            btn_cancel.Visible = true;
+            MultiView1.ActiveViewIndex = 1;
+        }
+    }
+}
