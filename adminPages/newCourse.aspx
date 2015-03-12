@@ -48,7 +48,7 @@
                         <SortedDescendingCellStyle BackColor="#FFFDF8" />
                         <SortedDescendingHeaderStyle BackColor="#6F8DAE" />
                     </asp:GridView>
-                    <asp:Button ID="cmdNext" runat="server" Text="insert Topic" CommandName="NextView" CssClass="submit" />
+                    <asp:Button ID="cmdNext" runat="server" Text="insert Course" CommandName="NextView" CssClass="submit" />
                 </asp:View>
                 <asp:View ID="View2" runat="server">
                     <table style="width: 100%;">
@@ -72,11 +72,11 @@
                         <tr>
                             <td class="auto-style5"></td>
                             <td class="auto-style1">
-                                <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Insert" CssClass="four1" ValidationGroup="VG_Name" Width="78px" />
+                                <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Save" CssClass="four1" ValidationGroup="VG_Name" Width="78px" />
                             </td>
                         </tr>
                     </table>
-                    <asp:Button ID="cmdPrev" runat="server" Text="Show Topic" CommandName="PrevView" CssClass="four1" />
+                    <asp:Button ID="cmdPrev" runat="server" Text="Show Courses" CommandName="PrevView" CssClass="four1" />
                 </asp:View>
             </asp:MultiView>
         </ContentTemplate>

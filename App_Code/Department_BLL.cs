@@ -9,29 +9,19 @@ public class Department_BLL
     static DataSet ds = new DataSet();
     public static  DataSet getAllDepts()
     {
-        string query= "select *  from Department";
+        string query= "select Dept_Id, Dept_Name , Dept_Desc , Dept_Location  from Department";
         ds = DataAccessLayer.runQuery(query);
         return ds;
     }
-    #region getDeptById command text
-    //    public static DataSet getDeptByID(int deptId)
-//    {
-//        string query = @"select Dept_Id, Dept_Name , Dept_Desc , 
-//                        Dept_Location from Department where Dept_Id = "+deptId.ToString();
-//        ds = DataAccessLayer.runQuery(query);
-//        return ds;
-
-    //    }
-    #endregion
-    public static DataSet getDeptById(int deptId=0)
+    public static DataSet getDeptByID(int deptId)
     {
-        string _procName = "DeptInfo";
-         SqlParameter[] sqlParameters = new SqlParameter[1];
-         sqlParameters[0] = new SqlParameter("@deptId", SqlDbType.Int);
-         sqlParameters[0].Value = deptId;
-         ds = DataAccessLayer.selectProc(_procName, sqlParameters);
-         return ds;
+        string query = @"select Dept_Id, Dept_Name , Dept_Desc , 
+                        Dept_Location from Department where Dept_Id = "+deptId.ToString();
+        ds = DataAccessLayer.runQuery(query);
+        return ds;
+
     }
+
     public static int  deleteDept(int deptId)
     {
         string proName="Del_Dept";
@@ -41,11 +31,11 @@ public class Department_BLL
         int affected = DataAccessLayer.CUDQuery(_proName: proName,spmtr:sqlParameters);
         return affected;
     }
-    public static int updateDept(int deptId, string name=null, string desc=null, string loc=null, int Manager= 0)
+    public static int updateDept(int deptId, string name=null, string desc=null, string loc=null)
     {
         //@id int , @name varchar(50)=null, @desc varchar(50)=null , @loc varchar(50)=null
         string proName="Edit_Dept";
-        SqlParameter[] sqlParameters = new SqlParameter[5];
+        SqlParameter[] sqlParameters = new SqlParameter[4];
             sqlParameters[0] = new SqlParameter("@id", SqlDbType.Int);
             sqlParameters[0].Value = deptId;
 
@@ -58,15 +48,13 @@ public class Department_BLL
             sqlParameters[3] = new SqlParameter("@loc", SqlDbType.VarChar);
             sqlParameters[3].Value = loc;
 
-            sqlParameters[4] = new SqlParameter("@Manager", SqlDbType.Int);
-            sqlParameters[4].Value = Manager;
         int affected = DataAccessLayer.CUDQuery(_proName: proName, spmtr: sqlParameters);
         return affected;
     }
-    public static int insertDept(string name = null, string desc = null, string loc = null, int Manager = 0)
+    public static int insertDept(string name=null, string desc=null, string loc=null)
     {
         string proName = "new_Dept";
-        SqlParameter[] sqlParameters = new SqlParameter[4];
+        SqlParameter[] sqlParameters = new SqlParameter[3];
 
         sqlParameters[0] = new SqlParameter("@name", SqlDbType.VarChar);
         sqlParameters[0].Value = name;
@@ -76,9 +64,6 @@ public class Department_BLL
 
         sqlParameters[2] = new SqlParameter("@loc", SqlDbType.VarChar);
         sqlParameters[2].Value = loc;
-
-        sqlParameters[3] = new SqlParameter("@Manager", SqlDbType.Int);
-        sqlParameters[3].Value = Manager;
 
         int affected = DataAccessLayer.CUDQuery(_proName: proName, spmtr: sqlParameters);
         return affected;

@@ -27,7 +27,7 @@ public partial class TakeExam : System.Web.UI.Page
         }
         else
         {
-            return;
+            Response.Redirect("StudentExamShow.aspx");
         }
 
     }
@@ -69,7 +69,7 @@ public partial class TakeExam : System.Web.UI.Page
         int time;
         if (ViewState["time"] != null)
         {
-            time = (int)Session["time"];
+            time = (int)ViewState["time"];
             if (time <= 0)
             {
                 Btn_Submit_Click(Btn_Submit, new EventArgs());

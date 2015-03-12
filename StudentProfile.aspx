@@ -6,107 +6,70 @@
 
     <asp:MultiView ID="MV_Personal" runat="server" ActiveViewIndex="0">
         <asp:View ID="V_ShowPersonal" runat="server">
-            <table class="stPro">
-                <caption>
-                    Personal Information
-                    <asp:LinkButton ID="lbtn_edit" runat="server" OnClick="lbtn_edit_Click" >Edit</asp:LinkButton></caption>
-                <tr>
-                    <td>
-                        <asp:Label ID="Label1" runat="server" Text="Full Name"></asp:Label>
-                    </td>
-                    <td>
-                        <asp:Label ID="lbl_fullname" runat="server" Text=""></asp:Label>
-                    </td>
+            <div class="stPro">
+                <div class="Panel-title">
+                    <span>Personal Information</span>
+                    <asp:LinkButton ID="lbtn_edit" runat="server" OnClick="lbtn_edit_Click" class="four1">Edit</asp:LinkButton>
+                </div>
+                <div class="userImag">
+                    <asp:Image ID="Image1" runat="server" />
+                </div>
+                <div class="panel-item">
 
-                </tr>
-                <tr>
-                    <td>
-                        <asp:Label ID="Label2" runat="server" Text="Age"></asp:Label>
-                    </td>
-                    <td>
-                        <asp:Label ID="lbl_age" runat="server" Text=""></asp:Label>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
+                    <%--<asp:Label ID="Label1" runat="server" Text="Full Name"></asp:Label>--%>
 
-                        <asp:Label ID="Label4" runat="server" Text="Address"></asp:Label>
+                    <asp:Label ID="lbl_fullname" runat="server" Text=""></asp:Label>
 
-                    </td>
-                    <td>
+                    <table>
+                        <tr>
+                           <td><asp:Label ID="lbl_age" runat="server" Text=""></asp:Label></td>
 
-                        <asp:Label ID="lbl_address" runat="server" Text=""></asp:Label>
 
-                    </td>
+                        </tr>
+                        <tr>
+                            <td><asp:Label ID="Label4" runat="server" Text="Address"></asp:Label></td>
 
-                </tr>
-                <tr>
-                    <td>
 
-                        <asp:Label ID="Label6" runat="server" Text="Phone"></asp:Label>
+                           <td> <asp:Label ID="lbl_address" runat="server" Text=""></asp:Label></td>
+                        </tr>
 
-                    </td>
-                    <td>
+                        <tr>
+                            <td><asp:Label ID="Label6" runat="server" Text="Phone"></asp:Label></td>
 
-                        <asp:Label ID="lbl_phone" runat="server" Text=""></asp:Label>
 
-                    </td>
+                          <td>  <asp:Label ID="lbl_phone" runat="server" Text=""></asp:Label></td>
 
-                </tr>
+                        </tr>
+                        <tr>
+                            <td>
+                            <asp:Label ID="Label10" runat="server" Text="E-Mail"></asp:Label></td>
 
-                <tr>
-                    <td>
+                           <td> <asp:Label ID="lbl_email" runat="server" Text=""></asp:Label></td>
 
-                        <asp:Label ID="Label10" runat="server" Text="E-Mail"></asp:Label>
+                        </tr>
+                        <tr>
+                           <td> <asp:Label ID="Label12" runat="server" Text="Department Name"></asp:Label></td>
 
-                    </td>
-                    <td>
 
-                        <asp:Label ID="lbl_email" runat="server" Text=""></asp:Label>
+                            <td><asp:Label ID="lbl_dept" runat="server" Text=""></asp:Label></td>
 
-                    </td>
+                        </tr>
 
-                </tr>
-                <tr>
-                    <td>
+                        <tr>
 
-                        <asp:Label ID="Label12" runat="server" Text="Department Name"></asp:Label>
 
-                    </td>
-                    <td>
+                            <td>
+                            <asp:Label ID="lbl_desc" runat="server" Text=""></asp:Label>
+                                </td>
+                        </tr>
+                        <tr>
+                            <td><asp:Label ID="Label15" runat="server" Text="Department Loaction"></asp:Label></td>
 
-                        <asp:Label ID="lbl_dept" runat="server" Text=""></asp:Label>
 
-                    </td>
-
-                </tr>
-                <tr>
-                    <td>
-
-                        <asp:Label ID="Label14" runat="server" Text="Department Description"></asp:Label>
-
-                    </td>
-                    <td>
-
-                        <asp:Label ID="lbl_desc" runat="server" Text=""></asp:Label>
-
-                    </td>
-
-                </tr>
-                <tr>
-                    <td>
-
-                        <asp:Label ID="Label15" runat="server" Text="Department Loaction"></asp:Label>
-
-                    </td>
-                    <td>
-
-                        <asp:Label ID="lbl_loc" runat="server" Text=""></asp:Label>
-
-                    </td>
-
-                </tr>
-            </table>
+                          <td>  <asp:Label ID="lbl_loc" runat="server" Text=""></asp:Label></td>
+                        </tr>
+                    </table>
+                </div>
         </asp:View>
         <asp:View ID="V_editPersonal" runat="server">
             <table>
@@ -208,6 +171,12 @@
 
                 </tr>
                 <tr>
+                    <td>Upload image</td>
+                    <td>
+                        <asp:FileUpload ID="userImag" runat="server" />
+                    </td>
+                </tr>
+                <tr>
                     <td>&nbsp;</td>
                     <td>
 
@@ -224,24 +193,26 @@
             </table>
         </asp:View>
     </asp:MultiView>
-    <hr />
-    <header>Courses</header>
-    <asp:DataList ID="DataList_Courses" runat="server" CellPadding="4" ForeColor="#333333">
-        <AlternatingItemStyle BackColor="White" ForeColor="#284775" />
-        <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
-        <HeaderStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
-        <ItemStyle BackColor="#F7F6F3" ForeColor="#333333" />
-        <ItemTemplate>
-            Course Name:<asp:Label ID="Label23" runat="server" Text='<%# Bind("Crs_Name") %>'></asp:Label>
-            <br />
-            Course Duration:<asp:Label ID="Label24" runat="server" Text='<%# Bind("Crs_Duration") %>'></asp:Label>
-            <br />
-            Course Instructor:<asp:Label ID="Label25" runat="server" Text='<%# Bind("Ins_Name") %>'></asp:Label>
-            <br />
-            <br />
-        </ItemTemplate>
-        <SelectedItemStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
-    </asp:DataList>
+
+    <div class="courses">
+
+        <asp:DataList ID="DataList_Courses" runat="server" CellPadding="4" ForeColor="#333333" GridLines="Vertical">
+            <AlternatingItemStyle BackColor="White" ForeColor="#284775" />
+            <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
+            <HeaderStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
+            <ItemStyle BackColor="#F7F6F3" ForeColor="#333333" />
+            <ItemTemplate>
+                Course Name:<asp:Label ID="Label23" runat="server" Text='<%# Bind("Crs_Name") %>'></asp:Label>
+                <br />
+                Course Duration:<asp:Label ID="Label24" runat="server" Text='<%# Bind("Crs_Duration") %>'></asp:Label>
+                <br />
+                Course Instructor:<asp:Label ID="Label25" runat="server" Text='<%# Bind("Ins_Name") %>'></asp:Label>
+                <br />
+                <br />
+            </ItemTemplate>
+            <SelectedItemStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
+        </asp:DataList>
+    </div>
     <hr />
 
     <header>

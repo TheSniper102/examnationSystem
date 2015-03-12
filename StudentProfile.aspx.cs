@@ -5,7 +5,8 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
-
+using System.IO;
+using System.Text;
 public partial class StudentProfile : System.Web.UI.Page
 {
     ObjectDataSource obj = new ObjectDataSource();
@@ -20,7 +21,7 @@ public partial class StudentProfile : System.Web.UI.Page
             Auth_BLL.RouteUser();
 
         stid = Auth_BLL.currentUserId();
-        
+
 
         if (!Page.IsPostBack)
         {
@@ -53,7 +54,7 @@ public partial class StudentProfile : System.Web.UI.Page
     {
         ddl_dept.DataBind();
         MV_Personal.SetActiveView(V_editPersonal);
-       
+
         DataSet info = ShowInfo(stid);
         txt_fullname.Text = info.Tables[0].Rows[0]["Name"].ToString();
         txt_address.Text = info.Tables[0].Rows[0]["Address"].ToString();
@@ -97,7 +98,8 @@ public partial class StudentProfile : System.Web.UI.Page
         lbl_dept.Text = info.Tables[0].Rows[0]["Dept_Name"].ToString();
         lbl_desc.Text = info.Tables[0].Rows[0]["Dept_Desc"].ToString();
 
-        lbl_loc.Text = info.Tables[0].Rows[0]["Dept_Location"].ToString();
+        lbl_loc.Text = info.Tables[0].Rows[0]["Dept_Location"].ToString();//nonUser.png
+        Image1.ImageUrl = (info.Tables[0].Rows[0]["img"].ToString() != "null") ? "~/images/users/" + info.Tables[0].Rows[0]["img"].ToString() : "~/images/users/nonUser.png";
     }
 
 
@@ -108,12 +110,29 @@ public partial class StudentProfile : System.Web.UI.Page
         obj.UpdateMethod = "UpdateStudent";
         obj.Updated += HandleCrud.obj_Updated;
         obj.UpdateParameters.Clear();
+
         obj.UpdateParameters.Add("ST_id", stid.ToString());
         obj.UpdateParameters.Add("Name", txt_fullname.Text);
         obj.UpdateParameters.Add("Address", txt_address.Text);
         obj.UpdateParameters.Add("Age", txt_age.Text);
         obj.UpdateParameters.Add("phone", txt_phone.Text);
         obj.UpdateParameters.Add("E_Mail", txt_email.Text);
+        /* upload image section */
+        
+        #region upload image
+        string hashedName = string.Empty;
+        if (userImag.HasFile)
+        {
+            string ext = Path.GetExtension(userImag.FileName);
+            string fileName = Path.GetFileName(userImag.PostedFile.FileName);
+             hashedName = Auth_BLL.hash_pass(fileName);
+            userImag.PostedFile.SaveAs(Server.MapPath("~/images/users/") + hashedName + ext);
+
+            obj.UpdateParameters.Add("img", hashedName + ext);
+        }
+        if (string.IsNullOrEmpty(hashedName))
+            obj.UpdateParameters.Add("img", "nonUser.png");
+        #endregion
         if (ddl_dept.SelectedValue != "")
         {
             obj.UpdateParameters.Add("DeptNo", ddl_dept.SelectedValue);
@@ -122,7 +141,7 @@ public partial class StudentProfile : System.Web.UI.Page
         {
             obj.UpdateParameters.Add("DeptNo", "0");
         }
-
+        obj.UpdateParameters.Add("active", "5");
         int updated = obj.Update();
         if (updated > 0)
         {

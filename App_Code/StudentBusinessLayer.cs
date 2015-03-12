@@ -55,10 +55,10 @@ public class StudentBusinessLayer
         return ds;
     }
 
-    public static int insertStudent(string Name, int Age, string phone, string Address, string E_Mail, int DeptNo, string Pass, string Gender, string SecQues, string SecAns)
+    public static int insertStudent(string Name, int Age, string phone, string Address, string E_Mail, int DeptNo, string Pass, string Gender, string SecQues, string SecAns,int active=1)
     {
         int affected;
-
+        #region paramters
         SqlParameter _name = new SqlParameter("@name", Name);
         _name.SqlDbType = SqlDbType.VarChar;
         SqlParameter _age = new SqlParameter("@age", Age);
@@ -69,7 +69,7 @@ public class StudentBusinessLayer
         _address.SqlDbType = SqlDbType.VarChar;
         SqlParameter _email = new SqlParameter("@email", E_Mail);
         _email.SqlDbType = SqlDbType.VarChar;
-        SqlParameter _pass = new SqlParameter("@password", Pass);
+        SqlParameter _pass = new SqlParameter("@password",Auth_BLL.hash_pass(Pass));
         _pass.SqlDbType = SqlDbType.VarChar;
         SqlParameter _gender = new SqlParameter("@gender", Gender);
         _gender.SqlDbType = SqlDbType.VarChar;
@@ -77,17 +77,20 @@ public class StudentBusinessLayer
         _ques.SqlDbType = SqlDbType.VarChar;
         SqlParameter _ans = new SqlParameter("@secans", SecAns);
         _ans.SqlDbType = SqlDbType.VarChar;
+        SqlParameter _active = new SqlParameter("@active", active);
+        _active.SqlDbType = SqlDbType.Int;
+        #endregion
 
         if (DeptNo != 0)
         {
             SqlParameter _dept = new SqlParameter("@dept", DeptNo);
             _dept.SqlDbType = SqlDbType.Int;
-            SqlParameter[] param = { _name, _age, _phone, _address, _email, _dept, _pass, _gender, _ques, _ans };
+            SqlParameter[] param = { _name, _age, _phone, _address, _email, _dept, _pass, _gender, _ques, _ans, _active };
             affected = DataAccessLayer.RunDML("InsertStudent", param);
         }
         else
         {
-            SqlParameter[] param = { _name, _age, _phone, _address, _email };
+            SqlParameter[] param = { _name, _age, _phone, _address, _email, _active };
             affected = DataAccessLayer.RunDML("InsertStudent", param);
         }
 
@@ -103,7 +106,7 @@ public class StudentBusinessLayer
         int affected = DataAccessLayer.RunDML("DeleteStudent", param);
         return affected;
     }
-    public static int UpdateStudent(int ST_id, string Name, int Age, string phone, string Address, string E_Mail, string DeptNo)
+    public static int UpdateStudent(int ST_id, string Name, int Age, string phone, string Address, string E_Mail, string DeptNo, string img = null,int active=5)
     {
         SqlParameter id = new SqlParameter("@id", ST_id);
         id.SqlDbType = SqlDbType.Int;
@@ -119,12 +122,20 @@ public class StudentBusinessLayer
         _email.SqlDbType = SqlDbType.VarChar;
         SqlParameter _dept = new SqlParameter("@dept", DeptNo);
         _dept.SqlDbType = SqlDbType.Int;
-        SqlParameter[] param = { id, _name, _age, _phone, _address, _email, _dept };
+
+        SqlParameter _img = new SqlParameter("@img", img);
+        _img.SqlDbType = SqlDbType.VarChar;
+
+        SqlParameter _active = new SqlParameter("@active", active);
+        _active.SqlDbType = SqlDbType.Int;
+
+        
+        SqlParameter[] param = { id, _name, _age, _phone, _address, _email, _dept,_img,_active };
 
         int affected = DataAccessLayer.RunDML("Update_student", param);
         return affected;
     }
-
+   
     public static DataSet SearchStudentcourse(int searchkey, int searchword)
     {
         SqlParameter type = new SqlParameter("@searchkey", searchkey);

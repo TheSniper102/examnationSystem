@@ -32,7 +32,7 @@
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Responsive Hover Table</h3>
+                    <h3 class="box-title">Students in system</h3>
                 </div>
 
                 <div class="box-body table-responsive no-padding">
@@ -100,6 +100,17 @@
                                     <asp:Label ID="lbl_des_dept" runat="server" Text='<%# Bind("DeptNo") %>'></asp:Label>
                                 </ItemTemplate>
                             </asp:TemplateField>
+                            <asp:TemplateField HeaderText="active">
+                                <EditItemTemplate>
+                                    <asp:DropDownList ID="act_ddl" runat="server" CssClass="small_inpt">
+                                        <asp:ListItem Value="1">active</asp:ListItem>
+                                        <asp:ListItem Value="0">decative</asp:ListItem>
+                                    </asp:DropDownList>
+                                </EditItemTemplate>
+                                <ItemTemplate>
+                                    <asp:Label ID="act_lbl" runat="server" Text='<%# Bind("active") %>'></asp:Label>
+                                </ItemTemplate>
+                            </asp:TemplateField>
                         </Columns>
                         <EditRowStyle BackColor="#999999" />
                         <EmptyDataTemplate>
@@ -151,7 +162,7 @@
                         <td>
                             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                                 <ContentTemplate>
-                                    <asp:TextBox ID="txt_name" runat="server" AutoPostBack="True" OnTextChanged="txt_name_TextChanged" CssClass="col-xs-5"></asp:TextBox>
+                                    <asp:TextBox ID="txt_name" runat="server" AutoPostBack="True" OnTextChanged="txt_name_TextChanged" CssClass="col-xs-5" MaxLength="50"></asp:TextBox>
                                     <br />
                                     <asp:Label ID="lbl_name_error" runat="server" ForeColor="#990000"></asp:Label>
                                 </ContentTemplate>

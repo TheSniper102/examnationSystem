@@ -28,15 +28,22 @@ public partial class InstructorCourse : System.Web.UI.Page
             ddl_inst.DataValueField = "Ins_Id";
             ddl_inst.DataBind();
 
-            obj.TypeName = "StudentBusinessLayer";
             obj.SelectParameters.Clear();
-            obj.SelectMethod = "selectCourseIdName";
+            obj.SelectMethod = "SelectInsCrs";
             obj.Select();
-            lbx_crs.DataSource = obj;//Crs_Id,Crs_Name
+            GridView_InsCrs.DataSource = obj;
+            GridView_InsCrs.DataBind();
+            Session.Add("object", obj);
+            ObjectDataSource ob=new ObjectDataSource();
+            ob.TypeName = "StudentBusinessLayer";
+            ob.SelectParameters.Clear();
+            ob.SelectMethod = "selectCourseIdName";
+            ob.Select();
+            lbx_crs.DataSource = ob;//Crs_Id,Crs_Name
             lbx_crs.DataTextField = "Crs_Name";
             lbx_crs.DataValueField = "Crs_Id";
             lbx_crs.DataBind();
-            Session.Add("object", obj);
+            
 
 
             obj.Inserted += HandleCrud.obj_Inserted;
@@ -63,6 +70,8 @@ public partial class InstructorCourse : System.Web.UI.Page
             obj.InsertParameters.Add("insid", ddl_inst.SelectedValue);
             obj.InsertParameters.Add("crs", crs);
             int inserted = obj.Insert();
+            GridView_InsCrs.DataSource = obj;
+            GridView_InsCrs.DataBind();
             Session["object"] = obj;
             if (inserted > 0)
             {
@@ -70,5 +79,23 @@ public partial class InstructorCourse : System.Web.UI.Page
                 img_result.Visible = true;
             }
         }
+    }
+    protected void GridView_InsCrs_RowDeleting(object sender, GridViewDeleteEventArgs e)
+    {
+        obj = (ObjectDataSource)Session["object"];
+        obj.TypeName = "InstructorBusinessLayer";
+        obj.DeleteParameters.Clear();
+        obj.DeleteMethod = "DeleteInsCrs";
+        obj.Deleted += HandleCrud.obj_Deleted;
+        Label ins = (Label)GridView_InsCrs.Rows[e.RowIndex].FindControl("lbl_des_ins_id");
+        Label crs = (Label)GridView_InsCrs.Rows[e.RowIndex].FindControl("lbl_des_crs_id");
+        obj.DeleteParameters.Add("insid", ins.Text);
+        obj.DeleteParameters.Add("crs", crs.Text);
+        int deleted = obj.Delete();
+        lbl_res.Text = deleted + " rows Deleted";
+
+        GridView_InsCrs.DataSource = obj;
+        GridView_InsCrs.DataBind();
+        Session["object"] = obj;
     }
 }

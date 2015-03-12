@@ -26,4 +26,19 @@ public class InstructorBusinessLayer
         int affected = DataAccessLayer.RunDML("insertInstructorCourses", param);
         return affected;
     }
+    public static DataSet SelectInsCrs()
+    {
+        ds = DataAccessLayer.RunQuery("SelectInsCrs");
+        return ds;
+    }
+    public static int DeleteInsCrs(int insid, int crs)
+    {
+        SqlParameter ins = new SqlParameter("@ins_id", insid);
+        ins.SqlDbType = SqlDbType.Int;
+        SqlParameter crsid = new SqlParameter("@crs_id", crs);
+        crsid.SqlDbType = SqlDbType.Int;
+        SqlParameter[] param = { ins, crsid };
+        int affected = DataAccessLayer.RunDML("deleteCrsIns", param);
+        return affected;
+    }
 }

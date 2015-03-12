@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
+using System.Data;
 public partial class GenerateExam : System.Web.UI.Page
 {
     
@@ -50,10 +50,23 @@ public partial class GenerateExam : System.Web.UI.Page
             lbl_res.ForeColor = System.Drawing.Color.Red;
             return;
         }
-
-        //SelectStudentInCourse
-
         ObjectDataSource ob = new ObjectDataSource();
+        //SelectStudentInCourse
+        ob.TypeName = "ExamBusinessLayer";
+        ob.SelectParameters.Clear();
+        ob.SelectMethod = "CheckQuestions";
+        ob.SelectParameters.Add("crs_id", ddl_crs.SelectedValue);
+        DataView dv = (DataView)ob.Select();
+        DataSet ds = new DataSet();
+        ds.Tables.Add(dv.ToTable());
+        string count = ds.Tables[0].Rows[0]["con"].ToString();
+        if (int.Parse(count) < 10)
+        {
+            lbl_res.Text = "this course has no enough questions";
+            lbl_res.ForeColor = System.Drawing.Color.Red;
+            return;
+        }
+
         ob.TypeName = "ExamBusinessLayer";
         ob.SelectParameters.Clear();
         ob.SelectMethod = "SelectStudentInCourse";
@@ -74,8 +87,7 @@ public partial class GenerateExam : System.Web.UI.Page
             ob.InsertParameters.Add("tf", txt_tf.Text);
 
 
-            int inserted = ob.Insert();
-
+            ob.Insert();
 
             lbl_res.Text = "Exam Generated Successfully";
             lbl_res.ForeColor = System.Drawing.Color.Green;

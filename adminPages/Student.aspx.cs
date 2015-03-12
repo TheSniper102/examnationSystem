@@ -135,6 +135,7 @@ public partial class Student : System.Web.UI.Page
 
         DropDownList dept = (DropDownList)Student_GridView.Rows[e.RowIndex].FindControl("ddl_edit_dept");
 
+        DropDownList active = (DropDownList)Student_GridView.Rows[e.RowIndex].FindControl("act_ddl");
         obj.UpdateParameters.Add("ST_id", id.Text);
         if (name.Text.Length <= 50)
             obj.UpdateParameters.Add("Name", name.Text);
@@ -191,19 +192,28 @@ public partial class Student : System.Web.UI.Page
             return;
         }
         obj.UpdateParameters.Add("DeptNo", dept.Text);
+        obj.UpdateParameters.Add("img","null");
+        obj.UpdateParameters.Add("active", active.SelectedValue.ToString());
         int updated = obj.Update();
         Student_GridView.EditIndex = -1;
         Student_GridView.DataSource = obj;
         Student_GridView.DataBind();
         Session["object"] = obj;
-        lbl_res.Text = updated + " rows updated";
-        lbl_res.ForeColor = Color.Green;
-        img_gvres.Visible = true;
+        if (updated > 0)
+        {
+            lbl_res.Text = "success";
+            lbl_res.ForeColor = Color.Green;
+            img_gvres.Visible = true;
+        }else
+        {
+            lbl_res.Text = "update failed";
+            lbl_res.ForeColor = Color.Red;
+            
+        }
     }
     protected void btn_save_Click(object sender, EventArgs e)
     {
-        if (txt_name.Text.Contains(' '))
-        {
+        
             if (txt_name.Text.Length <= 50)
             {
                 if (txt_address.Text.Contains(','))
@@ -225,7 +235,7 @@ public partial class Student : System.Web.UI.Page
                         obj.InsertParameters.Add("SecAns",txt_secans.Text);
                         //=======no dept===========
                         obj.InsertParameters.Add("DeptNo", ddl_dept.SelectedValue);
-
+                        obj.InsertParameters.Add("active", "1");
                         int inserted = obj.Insert();
                         Student_GridView.DataSource = obj;
                         Student_GridView.DataBind();
@@ -263,13 +273,8 @@ public partial class Student : System.Web.UI.Page
                 lbl_result.Text = "name must be less than 50 character";
                 lbl_result.ForeColor = Color.Red;
             }
-        }
-        else
-        {
-            txt_name.Focus();
-            lbl_result.Text = "full name must be like [mohammed ahmed mahmoud] seprated by spaces";
-            lbl_result.ForeColor = Color.Red;
-        }
+        
+
 
     }
     protected void txt_name_TextChanged(object sender, EventArgs e)

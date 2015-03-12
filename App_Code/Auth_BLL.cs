@@ -250,7 +250,7 @@ public class Auth_BLL
         if ((Admin == true) || (instructor == true) )
             HttpContext.Current.Response.Redirect("adminPages/profile.aspx");
             else 
-                HttpContext.Current.Response.Redirect("StudentHome.aspx");
+                HttpContext.Current.Response.Redirect("~/StudentHome.aspx");
     }
 #region Route user
     /*

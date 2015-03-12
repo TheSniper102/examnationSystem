@@ -19,6 +19,14 @@ public class ExamBusinessLayer
        ds= DataAccessLayer.RunQuery("CurrentExames", pram);
         return ds;
     }
+    public static DataSet CheckQuestions(int crs_id)
+    {
+        SqlParameter crs = new SqlParameter("@crsid", crs_id);
+        crs.DbType = DbType.Int32;
+        SqlParameter[] pram = { crs };
+        ds = DataAccessLayer.RunQuery("CheckQuestions", pram);
+        return ds;
+    }
     public static List<int> SelectStudentInCourse(int crs_id)
     {
         SqlParameter crs = new SqlParameter("@crsid", crs_id);
